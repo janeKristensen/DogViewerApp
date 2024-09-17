@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DogViewer.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Image 
+                x:Name="DogPhotoImg"
+                HeightRequest="300"
+                Aspect="AspectFit"
+                SemanticProperties.Description="Random photo of a dog" />
+
+            <Label
+                Text="Welcome to Dog Viewer!"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1" />
+
+            <Label
+                Text="This App will bring you cute dog pictures and helpful information on dog breeds."
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"/>
+
+            <Label
+                Text="Input name of breed"
+                HorizontalOptions="Center"/>
+
+            <Entry
+                x:Name="BreedEntry"
+                WidthRequest="200"
+                HorizontalOptions="Center"/>
+
+            <HorizontalStackLayout
+                HorizontalOptions="Center"
+                Spacing="25">
+                <Button
+                    x:Name="RandomPicBtn"
+                    Text="Give me a random dog!" 
+                    SemanticProperties.Hint="Fetches an image of a random dog of any breed."
+                    Clicked="OnRandomPicClicked"
+                    HorizontalOptions="Fill" />
+
+                <Button
+                    x:Name="BreedPicBtn"
+                    Text="Give me a specific breed!" 
+                    SemanticProperties.Hint="Fetches an image of a random dog of a specific breed."
+                    Clicked="OnBreedPicClicked"
+                    HorizontalOptions="Fill" />
+            </HorizontalStackLayout>
+
+            
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
