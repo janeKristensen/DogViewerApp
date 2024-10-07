@@ -4,12 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:DogViewer"
-    Shell.FlyoutBehavior="Disabled"
     Title="DogViewer">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        
+            <ShellContent
+                 Title="Image Generator"
+                 ContentTemplate="{DataTemplate local:MainPage}"
+                 Route="MainPage" />
+            <ShellContent
+                Title="Database"
+                ContentTemplate="{DataTemplate local:DataBasePage}"
+                Route="DataBasePage" />
+        
+        
+    </FlyoutItem>
+    
 </Shell>

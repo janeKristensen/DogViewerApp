@@ -42,4 +42,23 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <DataTemplate x:Key="HeaderTemplate">
+        <ViewCell>
+            <Grid Padding="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <Label 
+         Grid.Column="0"
+         HorizontalTextAlignment="Start"
+         Text="Breed"/>
+                <Label 
+          Grid.Column="1"
+         HorizontalTextAlignment="Center"
+          Text="SubBreed"/>
+            </Grid>
+        </ViewCell>
+    </DataTemplate>
 </ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,38 +9,6 @@ using System.Threading.Tasks;
 
 namespace DogViewer
 {
-    internal class ImageResponse
-    {
-        public string? message {  get; set; }
-    }
-
-    internal class BreedResponse
-    {
-        [JsonPropertyName("message")]
-        public Dictionary<string, List<string>>? Breeds { get; set; }
-        public List<Dog> _dogBreedsList = new ();
-        
-        public List<Dog> GetDogBreedList() 
-        { 
-            foreach(var kvp in Breeds)
-            {
-                if (kvp.Value.Count == 0)
-                {
-                    _dogBreedsList.Add(new Dog(kvp.Key));
-                }
-                else
-                {
-                    foreach (string type in kvp.Value)
-                    {
-                        _dogBreedsList.Add(new Dog(kvp.Key, type));
-                    }
-                }
-            }
-            return _dogBreedsList;
-        }
-    }
-
-
     internal class Dog
     {
         private int _excersizeLevel;
@@ -49,13 +18,13 @@ namespace DogViewer
         public Dog(string breed, string subbreed) 
         { 
             BreedName = breed; 
-            Subbreed = subbreed;
+            SubBreed = subbreed;
         }
 
         public Dog(string breed, string subbreed, string coatLength, string size, double avgAge, string temper, int excersize) 
         {
             BreedName = breed;
-            Subbreed = subbreed;
+            SubBreed = subbreed;
             CoatLength = coatLength;    
             Size = size;
             AverageAge = avgAge;
@@ -64,7 +33,7 @@ namespace DogViewer
         }
 
         public string BreedName { get; set; }
-        public string Subbreed { get; set; } = string.Empty;
+        public string SubBreed { get; set; } = string.Empty;
         public string CoatLength { get; set; } = string.Empty;
         public string Size { get; set; } = string.Empty;
         public double AverageAge { get; set; } = 0;
@@ -79,6 +48,11 @@ namespace DogViewer
 
                 _excersizeLevel = value;
             }
+        }
+
+        public override string ToString()
+        {
+            return BreedName + SubBreed; 
         }
     }
 }
