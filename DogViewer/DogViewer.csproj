@@ -64,6 +64,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DogDatabase\DogDatabase.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="DataBasePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

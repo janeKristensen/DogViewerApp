@@ -1,30 +1,22 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 
-namespace DogViewer
+namespace DogDatabase
 {
-    internal class Dog
+    public class Dog
     {
         private int _excersizeLevel;
 
         public Dog(string breed) { BreedName = breed; }
 
-        public Dog(string breed, string subbreed) 
+        public Dog(string breed, string subbreed) : this(breed)
         { 
-            BreedName = breed; 
             SubBreed = subbreed;
         }
 
-        public Dog(string breed, string subbreed, string coatLength, string size, double avgAge, string temper, int excersize) 
+        public Dog(string breed, string subbreed, string coatLength, string size, double avgAge, string temper, int excersize) : this(breed, subbreed)
         {
-            BreedName = breed;
-            SubBreed = subbreed;
+            
             CoatLength = coatLength;    
             Size = size;
             AverageAge = avgAge;
