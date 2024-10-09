@@ -1,5 +1,7 @@
 ﻿
 
+using DogDatabase;
+
 namespace DogViewer
 {
     public partial class App : Application
@@ -19,12 +21,20 @@ namespace DogViewer
             Client = _serviceProvider.GetService<DogApiClient>();
             if (Client is null)
                 throw new NullReferenceException();
-            Load();
+            Load(); 
         }
 
         private async void Load()
         {
-            bool success = await Client.GetBreedsList();
+            await Client.GetBreedsList();
+            /*using (var db = new DbContextDog())
+            {
+                foreach (Dog dog in Client.DogBreedList)
+                {
+                    db.Dogs.Add(dog);
+                    db.SaveChanges();
+                }
+            }*/
         }
     }
 }

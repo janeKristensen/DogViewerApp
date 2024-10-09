@@ -46,12 +46,11 @@ namespace DogViewer
         private BreedResponse? _breedsResponse;
         public List<Dog>? DogBreedList = new();
 
-        public async Task<bool> GetBreedsList()
+        public async Task GetBreedsList()
         {
             Uri uri = new Uri(@"https://dog.ceo/api/breeds/list/all");
             _breedsResponse = await GetResponse<BreedResponse>(uri);  
             SetDogBreedList();
-            return DogBreedList == null ? true : false;
         }
 
         public async void SetDogBreedList()

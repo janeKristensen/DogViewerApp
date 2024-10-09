@@ -1,4 +1,6 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace DogDatabase
@@ -7,16 +9,16 @@ namespace DogDatabase
     {
         private int _excersizeLevel;
 
-        public Dog(string breed) { BreedName = breed; }
+        public Dog(string BreedName) { this.BreedName = BreedName; }
 
-        public Dog(string breed, string subbreed) : this(breed)
+        public Dog(string BreedName, string SubBreed) : this(BreedName)
         { 
-            SubBreed = subbreed;
+            this.SubBreed = SubBreed;
         }
 
-        public Dog(string breed, string subbreed, string coatLength, string size, double avgAge, string temper, int excersize) : this(breed, subbreed)
-        {
-            
+        public Dog(int id, string BreedName, string SubBreed, string coatLength, string size, double avgAge, string temper, byte excersize) : this(BreedName, SubBreed)
+        { 
+            Id = id;
             CoatLength = coatLength;    
             Size = size;
             AverageAge = avgAge;
@@ -24,18 +26,22 @@ namespace DogDatabase
             ExcersizeLevel = excersize;
         }
 
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
         public string BreedName { get; set; }
         public string SubBreed { get; set; } = string.Empty;
         public string CoatLength { get; set; } = string.Empty;
         public string Size { get; set; } = string.Empty;
         public double AverageAge { get; set; } = 0;
         public string Temper { get; set; } = string.Empty;
-        public int ExcersizeLevel 
+        public byte ExcersizeLevel 
         {
-            get { return _excersizeLevel; }
+            get { return (byte) _excersizeLevel; }
             set 
             {
-                if (value < 1 || value > 5)
+                if (value < 0 || value > 5)
                     throw new ArgumentException("Excersize level must be a value between 1 and 5.");
 
                 _excersizeLevel = value;
