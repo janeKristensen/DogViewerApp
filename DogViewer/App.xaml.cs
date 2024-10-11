@@ -1,7 +1,5 @@
 ﻿
 
-using DogDatabase;
-
 namespace DogViewer
 {
     public partial class App : Application
@@ -27,14 +25,15 @@ namespace DogViewer
         private async void Load()
         {
             await Client.GetBreedsList();
-            /*using (var db = new DbContextDog())
-            {
-                foreach (Dog dog in Client.DogBreedList)
-                {
-                    db.Dogs.Add(dog);
-                    db.SaveChanges();
-                }
-            }*/
+            //DatabaseInitializer.OnInit(Client);
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            var window = base.CreateWindow(activationState);
+            window.Height = 900;
+            window.Width = 1600;
+            return window;
         }
     }
 }

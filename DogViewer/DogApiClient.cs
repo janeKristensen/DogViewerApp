@@ -40,7 +40,7 @@ namespace DogViewer
     }
 
 
-    internal class DogApiClient : ApiClient
+    public class DogApiClient : ApiClient
     {
         private  ImageResponse? _dogImage;
         private BreedResponse? _breedsResponse;
@@ -85,14 +85,14 @@ namespace DogViewer
             return _dogImage.message;
         }  
 
-        public async Task<string> AsyncFetchBreedImage(string breed)
+        public async Task<string> AsyncFetchBreedImage(string breed, string subbreed="")
         {
             var rand = new Random((int)DateTime.Now.Ticks);
+
+            string input = breed.Replace(" ", "") + subbreed;
             var dog = DogBreedList.FindAll(
-                x => x.BreedName.StartsWith(breed) 
-                || x.SubBreed.StartsWith(breed) 
-                || string.Concat(x.BreedName, " ", x.SubBreed).Equals(breed) 
-                || string.Concat(x.SubBreed, " ", x.BreedName).Equals(breed));
+                x => string.Concat(x.BreedName, x.SubBreed).StartsWith(input) 
+                || string.Concat(x.SubBreed, x.BreedName).StartsWith(input));
             
             if (dog.Count() != 0) 
             {

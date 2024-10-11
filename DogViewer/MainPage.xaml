@@ -5,8 +5,8 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
+            Spacing="25"
+            Padding="10">
             <Image 
                 x:Name="DogPhotoImg"
                 HeightRequest="300"
@@ -19,18 +19,16 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
             <Label
-                Text="This App will bring you cute dog pictures and helpful information on dog breeds."
-                Style="{StaticResource SubHeadline}"
+                Text="This app will bring you cute dog pictures and helpful information on dog breeds."
+                Style="{StaticResource NormalText}"
+                TextColor="{StaticResource PrimaryLight}"
                 SemanticProperties.HeadingLevel="Level2"/>
-
-            <Label
-                Text="Input name of breed"
-                HorizontalOptions="Center"/>
 
             <Entry
                 x:Name="BreedEntry"
                 WidthRequest="200"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                Placeholder="Input breed name"/>
 
             <HorizontalStackLayout
                 HorizontalOptions="Center"
@@ -49,9 +47,7 @@
                     Clicked="OnBreedPicClicked"
                     HorizontalOptions="Fill" />
             </HorizontalStackLayout>
-
-            
-
+  
         </VerticalStackLayout>
     </ScrollView>
 

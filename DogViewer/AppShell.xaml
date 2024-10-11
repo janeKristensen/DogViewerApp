@@ -4,9 +4,11 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:DogViewer"
-    Title="DogViewer">
+    Title="DogViewer"
+    WidthRequest="800"
+    HeightRequest="800">
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" >
         
             <ShellContent
                  Title="Image Generator"
