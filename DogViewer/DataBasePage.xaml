@@ -12,6 +12,7 @@
                 Margin="0,10,10,10"
                 HorizontalOptions="Start" 
                 VerticalOptions="Start" 
+                
                 WidthRequest="275" 
                 IsEnabled="True"
                 Placeholder="Search database"
@@ -20,7 +21,7 @@
             <Label 
                 Text="Breed information" 
                 Style="{StaticResource Headline}"
-                TextColor="{StaticResource Tertiary}"
+                TextColor="{StaticResource PrimaryDarkText}"
                 VerticalOptions="Center" 
                 HorizontalOptions="Start" 
                 Padding="40,10,0,0"/>
@@ -28,7 +29,9 @@
 
 
         <HorizontalStackLayout Padding="0, 10, 0, 0">
-            <Border StrokeThickness="2">
+            <Border 
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 10,10,10,10">
                 <VerticalStackLayout>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -43,7 +46,7 @@
                             Text="Breed"
                             Padding="10,0,0,0"
                             Style="{StaticResource NormalText}"
-                            TextColor="{StaticResource PrimaryLight}"/>
+                            TextColor="{StaticResource Tertiary}"/>
                         <Label 
                             Grid.Column="1"
                             HorizontalTextAlignment="Start"
@@ -51,7 +54,7 @@
                             Text="Sub Breed"
                             Padding="10,0,0,0"
                             Style="{StaticResource NormalText}"
-                            TextColor="{StaticResource PrimaryLight}"/>
+                            TextColor="{StaticResource Tertiary}"/>
                     </Grid>
                     
                     <ListView
@@ -100,7 +103,10 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Border StrokeThickness="2" Margin="40,0,0,0">
+            <Border 
+                StrokeThickness="2" 
+                Margin="40,0,0,0" 
+                StrokeShape="RoundRectangle 10,10,10,10">
                 <HorizontalStackLayout BackgroundColor="{StaticResource Primary}">
                     <Grid Padding="20, 0, 0, 0">
                         <Grid.ColumnDefinitions>
@@ -167,8 +173,15 @@
                         VerticalTextAlignment="Start"
                         Padding="0,10,0,0"
                         Text="Average age:"/>
-
                     <Label 
+                        x:Name="lblScore" 
+                        Grid.Row="7" 
+                        Grid.Column="0"
+                        VerticalTextAlignment="Start"
+                        Padding="0,10,0,0"
+                        Text="User rating:"/>
+
+                        <Label 
                         x:Name="lblDataBreed" 
                         Grid.Row="0" 
                         Grid.Column="1"
@@ -210,7 +223,13 @@
                         Grid.Column="1"
                         VerticalTextAlignment="Start"
                         Padding="0,10,0,0"/>
-                </Grid>
+                    <Label 
+                        x:Name="lblDataScore" 
+                        Grid.Row="7" 
+                        Grid.Column="1"
+                        VerticalTextAlignment="Start"
+                        Padding="0,10,0,0"/>
+                    </Grid>
 
                 <Image 
                     x:Name="DatabaseDogPhotoImg"
@@ -234,6 +253,7 @@
                 IsVisible="False"
                 Text="Rate this dog:"
                 Style="{StaticResource SubHeadline}"
+                TextColor="{StaticResource PrimaryDarkText}"
                 VerticalTextAlignment="Center"
             />
 
@@ -241,7 +261,7 @@
                 x:Name="imgBtnOneStar"
                 Source="star.png"
                 IsVisible="False"
-                Clicked="AddRatingOne"/>
+                Clicked="AddRatingTwo"/>
             <ImageButton 
                 x:Name="imgBtnTwoStar"
                 Source="star.png"

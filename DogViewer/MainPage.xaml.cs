@@ -5,7 +5,13 @@
         public MainPage() 
         {
             InitializeComponent();
+            Load();
         }  
+
+        private async void Load()
+        {
+            DogPhotoImg.Source = await App.Client.AsyncFetchRandomImage();
+        }
 
         private async void OnRandomPicClicked(object sender, EventArgs e)
         {

@@ -7,21 +7,34 @@
         <VerticalStackLayout
             Spacing="25"
             Padding="10">
-            <Image 
-                x:Name="DogPhotoImg"
-                HeightRequest="300"
-                Aspect="AspectFit"
-                SemanticProperties.Description="Random photo of a dog" />
+            
+                <Grid Padding="20, 0, 0, 0" HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
+                <Border 
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                    <Image 
+                        x:Name="DogPhotoImg"
+                        HeightRequest="400" 
+                        Aspect="AspectFit"
+                        SemanticProperties.Description="Random photo of a dog" 
+                        HorizontalOptions="Center"/>
+                </Border>
+            </Grid>
+            
+            
             <Label
                 Text="Welcome to Dog Viewer!"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
 
-            <Label
+                <Label
                 Text="This app will bring you cute dog pictures and helpful information on dog breeds."
                 Style="{StaticResource NormalText}"
-                TextColor="{StaticResource PrimaryLight}"
+                TextColor="{StaticResource PrimaryDarkText}"
                 SemanticProperties.HeadingLevel="Level2"/>
 
             <Entry

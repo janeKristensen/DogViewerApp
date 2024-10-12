@@ -7,6 +7,8 @@ namespace DogViewer
         private static IServiceProvider _serviceProvider;
         public static IAlertService AlertSvc;
         internal static DogApiClient Client;
+        internal static List<DogDatabase.Dog> RatedDogs = new();
+        internal static DogDatabase.Dog? DefaultDog = new(1, "australian", "kelpie", "Medium", "Medium", 15, "Mild", 5);
 
         public App(IServiceProvider provider)
         {
