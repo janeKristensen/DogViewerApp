@@ -13,9 +13,9 @@ namespace DogDatabase
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                ,
+                connectionString: ConfigurationManager.ConnectionStrings["DogContextDB"].ConnectionString,
                 options => options.EnableRetryOnFailure(maxRetryCount:0));
         }
-        //connectionString: ConfigurationManager.ConnectionStrings["DogContextDB"].ConnectionString
+        //
     }
 }

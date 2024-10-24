@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 
 namespace DogViewer
 {
-    public interface IAlertService
-    {
-        public Task DisplayAlert(string title, string message, string cancel = "OK");
-        public Task<bool> DisplayAlertConfirmation(string title, string message, string cancel = "Cancel", string accept="OK");
+    public delegate Task AlertOperation(string title, string message);
+    public delegate Task<bool> AlertOperationConfirmation(string title, string message);
 
-    }
-
-    public class AlertService : IAlertService
+    public class AlertService 
     {
-        public Task DisplayAlert(string title, string message, string cancel = "OK")
+        public event AlertOperation alert;
+        public event AlertOperationConfirmation alertConfirm;    
+
+        public void Alert(string title, string message)
         {
-            return Application.Current.MainPage.DisplayAlert(title, message, cancel);
+            alert.Invoke(title, message);
         }
 
-        public Task<bool> DisplayAlertConfirmation(string title, string message, string cancel = "Cancel", string accept = "OK")
+        public void AlertConfirmation(string title, string message)
         {
-            return Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);  
+            alertConfirm.Invoke(title, message);
         }
     }
 }

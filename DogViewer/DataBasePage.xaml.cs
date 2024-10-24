@@ -8,7 +8,10 @@ public partial class DataBasePage : ContentPage
 {
 	private Dog? _selectedDog;
 	private List<Dog>? _breedList;
-	public DataBasePage()
+    private List<ImageButton> _ratingButtons;
+    private App _app = (App)Application.Current;
+
+    public DataBasePage()
 	{
         InitializeComponent();
 		Load();
@@ -18,45 +21,37 @@ public partial class DataBasePage : ContentPage
 	{
 		 _breedList = App.Client.DogBreedList;
         lstViewDatabase.ItemsSource = _breedList;
-		this.SetRatingVisibility();
+        _ratingButtons = new List<ImageButton>()
+        {
+            imgBtnOneStar,
+            imgBtnTwoStar,
+            imgBtnThreeStar,
+            imgBtnFourStar,
+            imgBtnFiveStar,
+        };
+        SetRatingVisibility();
     }
 
 	private void SetRatingVisibility()
 	{
+       
 		if (_selectedDog == null)
 		{
 			lblRateDog.IsVisible = false;
-			imgBtnOneStar.IsVisible = false;
-			imgBtnTwoStar.IsVisible = false;
-			imgBtnThreeStar.IsVisible = false;
-			imgBtnFourStar.IsVisible = false;
-			imgBtnFiveStar.IsVisible = false;
+            _ratingButtons.ForEach(x => x.IsVisible = false);
 		}
 		else
 		{
             lblRateDog.IsVisible = true;
-            imgBtnOneStar.IsVisible = true;
-			imgBtnTwoStar.IsVisible = true;
-			imgBtnThreeStar.IsVisible = true;
-			imgBtnFourStar.IsVisible = true;
-			imgBtnFiveStar.IsVisible = true;
+            _ratingButtons.ForEach(x => x.IsVisible = true);
+            _ratingButtons.ForEach(x => x.IsEnabled = false);
 
-            imgBtnOneStar.IsEnabled = true;
-            imgBtnTwoStar.IsEnabled = true;
-            imgBtnThreeStar.IsEnabled = true;
-            imgBtnFourStar.IsEnabled = true;
-            imgBtnFiveStar.IsEnabled = true;
-
-            if (App.RatedDogs != null)
+            if (_app.RatedDogs != null)
 			{
-				if (App.RatedDogs.Find(x => x.Id == _selectedDog.Id) != null)
+				if (_app.RatedDogs.Find(x => x.Id == _selectedDog.Id) != null)
 				{
-					imgBtnOneStar.IsEnabled = false;
-					imgBtnTwoStar.IsEnabled = false;
-					imgBtnThreeStar.IsEnabled = false;
-					imgBtnFourStar.IsEnabled = false;
-					imgBtnFiveStar.IsEnabled = false;
-				}
+                    _ratingButtons.ForEach(x => x.IsEnabled = false);
+                }
 			}
 		}
 	}
@@ -76,8 +71,9 @@ public partial class DataBasePage : ContentPage
             }
             catch (SqlException ex) 
             { 
-                _selectedDog = App.DefaultDog; 
-                await App.AlertSvc.DisplayAlert("Connection error", "Could not connect to the database.");
+                _selectedDog = App.DefaultDog;
+                App.AlertService.Alert("Connection error", "Could not connect to the database.");
+                
             }
 
 			DatabaseDogPhotoImg.Source = await App.Client.AsyncFetchBreedImage(_selectedDog.BreedName, _selectedDog.SubBreed);
@@ -86,18 +82,20 @@ public partial class DataBasePage : ContentPage
 				lblDataSubBreed.Text = "N/A";
 			else
 				lblDataSubBreed.Text = _selectedDog.SubBreed;
+
 			lblDataBreed.Text = _selectedDog.BreedName;
 			lblDataAge.Text = _selectedDog.AverageAge.ToString();
 			lblDataCoatLength.Text = _selectedDog.CoatLength;
 			lblDataExcersize.Text = _selectedDog.ExcersizeLevel.ToString();
 			lblDataSize.Text = _selectedDog.Size;
 			lblDataTemper.Text = _selectedDog.Temper;
-			if (_selectedDog.Score == 0)
+
+			if (_selectedDog.Ratings == 0)
 				lblDataScore.Text = "No rating";
 			else
                 lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
 
-            this.SetRatingVisibility();
+            SetRatingVisibility();
         }
     }
 
@@ -106,7 +104,7 @@ public partial class DataBasePage : ContentPage
 		if(_breedList != null)
             lstViewDatabase.ItemsSource = _breedList.FindAll(x => x.BreedName.StartsWith(e.NewTextValue) || x.SubBreed.StartsWith(e.NewTextValue));
  
-        this.SetRatingVisibility();
+        SetRatingVisibility();
     }
 
     private void AddRatingOne(object sender, EventArgs e)
@@ -137,7 +135,9 @@ public partial class DataBasePage : ContentPage
 	private void UpdateRating(int value)
 	{
         _selectedDog.AddRating(value);
-		App.RatedDogs.Add(_selectedDog);
+
+        //Dogs can only be rated once per instance of app
+		_app.RatedDogs.Add(_selectedDog);
 
 		try
 		{
@@ -156,10 +156,10 @@ public partial class DataBasePage : ContentPage
         catch (SqlException ex) 
         { 
             App.DefaultDog.AddRating(value);
-            App.RatedDogs.Add(App.DefaultDog); 
+            _app.RatedDogs.Add(App.DefaultDog); 
         }
 
         lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
-        this.SetRatingVisibility();
+        SetRatingVisibility();
     }
 }

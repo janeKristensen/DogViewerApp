@@ -29,13 +29,13 @@ namespace DogDatabase
         [Key]
         public int Id { get; set; }
 
-        
+        [Required]
         public string BreedName { get; init; }
         public string SubBreed { get; init; } = string.Empty;
-        public string CoatLength { get; init; } = string.Empty;
-        public string Size { get; init; } = string.Empty;
-        public double AverageAge { get; init; } = 0;
-        public string Temper { get; init; } = string.Empty;
+        public string CoatLength { get; set; } = string.Empty;
+        public string Size { get; set; } = string.Empty;
+        public double AverageAge { get; set; } = 0;
+        public string Temper { get; set; } = string.Empty;
         public int Score {  get; set; } = 0;
         public int Ratings { get; set; } = 0;
         public Decimal Stars { get; set; } = 0; 
@@ -43,7 +43,7 @@ namespace DogDatabase
         public byte ExcersizeLevel 
         {
             get { return (byte) _excersizeLevel; }
-            init 
+            set 
             {
                 if (value < 0 || value > 5)
                     throw new ArgumentException("Excersize level must be a value between 1 and 5.");
@@ -54,7 +54,7 @@ namespace DogDatabase
         
         public override string ToString()
         {
-            return BreedName + SubBreed; 
+            return $"{ BreedName} { SubBreed}"; 
         }
 
         public void AddRating(int value)

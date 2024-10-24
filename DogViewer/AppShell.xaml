@@ -22,7 +22,6 @@
                 Title="Top Rated"
                 ContentTemplate="{DataTemplate local:TopRatedPage}"
                 Route="TopRatedPage" />
-
     </FlyoutItem>
     
 </Shell>

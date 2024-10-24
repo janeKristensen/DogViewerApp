@@ -14,11 +14,12 @@ namespace DogViewer
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            builder.Services.AddSingleton<IAlertService, AlertService>();
+
             builder.Services.AddSingleton<DogApiClient>();
+            builder.Services.AddSingleton<AlertService>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

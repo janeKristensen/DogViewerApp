@@ -44,7 +44,12 @@ namespace DogViewer
     {
         private  ImageResponse? _dogImage;
         private BreedResponse? _breedsResponse;
-        public List<Dog>? DogBreedList = new();
+        public List<Dog>? DogBreedList { get; private set; }
+
+        public DogApiClient()
+        {
+            DogBreedList = new List<Dog>();
+        }
 
         public async Task GetBreedsList()
         {
@@ -74,7 +79,7 @@ namespace DogViewer
             }
             else 
             {
-                await App.AlertSvc.DisplayAlert("An error occurred!", "List of dog breeds was not set.");
+                 App.AlertService.Alert("An error occurred!", "List of dog breeds was not returned from API.");
             }    
         }
 
@@ -109,8 +114,8 @@ namespace DogViewer
                 return _dogImage.message;
             }
 
-            await App.AlertSvc.DisplayAlert("Image not found!", "The selected dog breed does not exist in the database. Please try again.");
-            return "";
+            App.AlertService.Alert("Image not found!", "The selected dog breed does not exist in the database. Please try again.");
+            return "default_dogs.png";
         }
     }
 }
