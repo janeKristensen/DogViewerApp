@@ -1,84 +1,121 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static System.Net.WebRequestMethods;
+using DogDatabase;
+
 
 
 namespace DogViewer
 {
-    internal class DogApiClient
+    public class ApiClient
     {
-        private  ImageResponse? _dogImage;
-        private BreedResponse? _breedsResponse;
-        private List<Dog>? _dogBreedList;
-
-        public async Task<bool> SetBreedsList()
+        public virtual async Task<T?> GetResponse<T>(Uri uri)
         {
-            Uri uri = new Uri(@"https://dog.ceo/api/breeds/list/all");
             using (HttpClient client = new())
             {
                 HttpResponseMessage response = await client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-
-                    _breedsResponse = JsonSerializer.Deserialize<BreedResponse>(responseBody);
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<T>(responseString);
                 }
             }
-            _dogBreedList = _breedsResponse.GetDogBreedList();
-            return true;    
+
+            return default; 
+        }
+    }
+
+
+    internal class ImageResponse
+    {
+        [JsonPropertyName("message")]
+        public string? message { get; set; }
+    }
+
+
+    internal class BreedResponse
+    {
+        [JsonPropertyName("message")]
+        public Dictionary<string, List<string>>? Breeds { get; set; }
+    }
+
+
+    public class DogApiClient : ApiClient
+    {
+        private  ImageResponse? _dogImage;
+        private BreedResponse? _breedsResponse;
+        public List<Dog>? DogBreedList { get; private set; }
+
+        public DogApiClient()
+        {
+            DogBreedList = new List<Dog>();
+        }
+
+        public async Task GetBreedsList()
+        {
+            Uri uri = new Uri(@"https://dog.ceo/api/breeds/list/all");
+            _breedsResponse = await GetResponse<BreedResponse>(uri);  
+            SetDogBreedList();
+        }
+
+        public async void SetDogBreedList()
+        {
+            if (_breedsResponse.Breeds != null)
+            {
+                foreach (var kvp in _breedsResponse.Breeds)
+                {
+                    if (kvp.Value.Count == 0)
+                    {
+                        DogBreedList.Add(new Dog(kvp.Key));
+                    }
+                    else
+                    {
+                        foreach (string type in kvp.Value)
+                        {
+                            DogBreedList.Add(new Dog(kvp.Key, type));
+                        }
+                    }
+                }
+            }
+            else 
+            {
+                 App.AlertService.Alert("An error occurred!", "List of dog breeds was not returned from API.");
+            }    
         }
 
         public async Task<string> AsyncFetchRandomImage()
         {
-            using (HttpClient client = new())
-            {
-                HttpResponseMessage response = await client.GetAsync(new Uri(@"https://dog.ceo/api/breeds/image/random"));
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    
-                    _dogImage = JsonSerializer.Deserialize<ImageResponse>(responseBody);
-                    return _dogImage.message;
-                }
+            Uri uri = new Uri(@"https://dog.ceo/api/breeds/image/random");
+            _dogImage = await GetResponse<ImageResponse>(uri);
+            return _dogImage.message;
+        }  
 
-                return "";
-            }
-        }
-
-        public async Task<string> AsyncFetchBreedImage(string breed)
+        public async Task<string> AsyncFetchBreedImage(string breed, string subbreed="")
         {
             var rand = new Random((int)DateTime.Now.Ticks);
-            var dog = _dogBreedList.FindAll(x => x.BreedName.StartsWith(breed) || x.Subbreed.StartsWith(breed) || string.Concat(x.BreedName, " ", x.Subbreed).Equals(breed) || string.Concat(x.Subbreed, " ", x.BreedName).Equals(breed));
+
+            string input = breed.Replace(" ", "") + subbreed;
+            var dog = DogBreedList.FindAll(
+                x => string.Concat(x.BreedName, x.SubBreed).StartsWith(input) 
+                || string.Concat(x.SubBreed, x.BreedName).StartsWith(input));
             
-            if (dog != null) 
+            if (dog.Count() != 0) 
             {
                 int randomIndex = rand.Next(0, dog.Count);
-                string uri = string.Empty;
+                string url = string.Empty;
 
-                if (dog[randomIndex].Subbreed == "")
-                    uri = $"https://dog.ceo/api/breed/{dog[randomIndex].BreedName}/images/random";
+                if (dog[randomIndex].SubBreed == "")
+                    url = $"https://dog.ceo/api/breed/{dog[randomIndex].BreedName}/images/random";
                 else
-                    uri = $"https://dog.ceo/api/breed/{dog[randomIndex].BreedName}/{dog[randomIndex].Subbreed}/images/random";
+                    url = $"https://dog.ceo/api/breed/{dog[randomIndex].BreedName}/{dog[randomIndex].SubBreed}/images/random";
 
-                using (HttpClient client = new())
-                {
-                    HttpResponseMessage response = await client.GetAsync(new Uri(uri));
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-
-                        _dogImage = JsonSerializer.Deserialize<ImageResponse>(responseBody);
-                        return _dogImage.message;
-                    }
-                }
+                Uri uri = new Uri(url);
+                _dogImage = await GetResponse<ImageResponse>(uri);
+                return _dogImage.message;
             }
 
-            return "";
+            App.AlertService.Alert("Image not found!", "The selected dog breed does not exist in the database. Please try again.");
+            return "default_dogs.png";
         }
     }
 }

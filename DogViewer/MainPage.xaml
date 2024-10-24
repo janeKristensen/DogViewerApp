@@ -5,32 +5,43 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image 
-                x:Name="DogPhotoImg"
-                HeightRequest="300"
-                Aspect="AspectFit"
-                SemanticProperties.Description="Random photo of a dog" />
+            Spacing="25"
+            Padding="10">
+            
+                <Grid Padding="20, 0, 0, 0" HorizontalOptions="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
+                <Border 
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 10,10,10,10">
+                    <Image 
+                        x:Name="DogPhotoImg"
+                        HeightRequest="400" 
+                        Aspect="AspectFit"
+                        SemanticProperties.Description="Random photo of a dog" 
+                        HorizontalOptions="Center"/>
+                </Border>
+            </Grid>
+            
+            
             <Label
                 Text="Welcome to Dog Viewer!"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" />
 
-            <Label
-                Text="This App will bring you cute dog pictures and helpful information on dog breeds."
-                Style="{StaticResource SubHeadline}"
+                <Label
+                Text="This app will bring you cute dog pictures and helpful information on dog breeds."
+                Style="{StaticResource NormalText}"
+                TextColor="{StaticResource PrimaryDarkText}"
                 SemanticProperties.HeadingLevel="Level2"/>
-
-            <Label
-                Text="Input name of breed"
-                HorizontalOptions="Center"/>
 
             <Entry
                 x:Name="BreedEntry"
                 WidthRequest="200"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                Placeholder="Input breed name"/>
 
             <HorizontalStackLayout
                 HorizontalOptions="Center"
@@ -49,9 +60,7 @@
                     Clicked="OnBreedPicClicked"
                     HorizontalOptions="Fill" />
             </HorizontalStackLayout>
-
-            
-
+  
         </VerticalStackLayout>
     </ScrollView>
 

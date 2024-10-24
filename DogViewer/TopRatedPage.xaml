@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DogViewer.TopRatedPage"
+             Title="Top 5 Dogs">
+    
+    <StackLayout 
+        WidthRequest="1000"
+        HorizontalOptions="Center">
+        <HorizontalStackLayout
+            HorizontalOptions="Center">
+            <StackLayout>
+                <CarouselView 
+                    x:Name="crslView"
+                    IndicatorView="indicatorView"
+                    WidthRequest="350"
+                    HorizontalOptions="Center"
+                    Loop="False"
+                    HorizontalScrollBarVisibility="Never"
+                    PositionChanged="OnPositionChanged">
+                    <CarouselView.ItemsLayout>
+                        <LinearItemsLayout
+                            Orientation="Horizontal"
+                            ItemSpacing="20"
+                            SnapPointsAlignment="Center"
+                            SnapPointsType="MandatorySingle"/>
+                    </CarouselView.ItemsLayout>
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Frame HasShadow="True"
+                                   BorderColor="DarkGray"
+                                   CornerRadius="5"
+                                   Margin="20"
+                                   HeightRequest="300"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="CenterAndExpand">
+                                    <StackLayout>
+                                        <Grid Padding="20, 0, 0, 0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label 
+                                                x:Name="lblBreed" 
+                                                Grid.Row="0" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Breed name:"/>
+                                            <Label 
+                                                x:Name="lblSubBreed" 
+                                                Grid.Row="1" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Sub breed:"/>
+                                            <Label 
+                                                x:Name="lblTemper" 
+                                                Grid.Row="2" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Temperment:"/>
+                                            <Label 
+                                                x:Name="lblExcersize" 
+                                                Grid.Row="3" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Excersize need:"/>
+                                            <Label 
+                                                x:Name="lblSize" 
+                                                Grid.Row="4" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Size:"/>
+                                            <Label 
+                                                x:Name="lblCoatLength" 
+                                                Grid.Row="5" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Coat length:"/>
+                                            <Label 
+                                                x:Name="lblAge" 
+                                                Grid.Row="6" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="Average age:"/>
+                                            <Label 
+                                                x:Name="lblScore" 
+                                                Grid.Row="7" 
+                                                Grid.Column="0"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="User rating:"/>
+
+                                            <Label 
+                                                x:Name="lblDataBreed" 
+                                                Grid.Row="0" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding BreedName}"/>
+                                            <Label 
+                                                x:Name="lblDataSubBreed" 
+                                                Grid.Row="1" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding SubBreed}"/>
+                                            <Label 
+                                                x:Name="lblDataTemper" 
+                                                Grid.Row="2" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding Temper}"/>
+                                            <Label 
+                                                x:Name="lblDataExcersize" 
+                                                Grid.Row="3" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding Excersize}"/>
+                                            <Label 
+                                                x:Name="lblDataSize" 
+                                                Grid.Row="4" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding Size}"/>
+                                            <Label 
+                                                x:Name="lblDataCoatLength" 
+                                                Grid.Row="5" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding CoatLength}"/>
+                                            <Label 
+                                                x:Name="lblDataAge" 
+                                                Grid.Row="6" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding AverageAge}"/>
+                                            <Label 
+                                                x:Name="lblDataScore" 
+                                                Grid.Row="7" 
+                                                Grid.Column="1"
+                                                VerticalTextAlignment="Start"
+                                                Padding="0,10,0,0"
+                                                Text="{Binding Stars}"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+            </StackLayout>
+            <Image 
+                x:Name="imgCrslView"
+                Margin="0,0,0,0"
+                HeightRequest="300"
+                Aspect="AspectFit"/>
+        </HorizontalStackLayout>
+        
+        <IndicatorView x:Name="indicatorView"
+           IndicatorColor="{StaticResource PrimaryDarkText}"
+           SelectedIndicatorColor="{StaticResource Tertiary}"
+           HorizontalOptions="Center" />
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <ImageButton 
+                Source="star.png" 
+                Clicked="NavigateLeft"
+                HorizontalOptions="Center"
+                Margin="0,20,10,0"/>
+            <Label 
+                Text="Navigate"
+                HorizontalOptions="Center"
+                VerticalTextAlignment="Center"
+                Margin="10,20,10,0"
+                FontSize="16"/>
+            <ImageButton 
+                Source="star.png" 
+                Clicked="NavigateRight"
+                HorizontalOptions="Center"
+                Margin="10,20,0,0"/>
+        </HorizontalStackLayout>
+    </StackLayout>
+</ContentPage>

@@ -63,4 +63,17 @@
 		<PackageReference Include="System.Text.Json" Version="8.0.4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DogDatabase\DogDatabase.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="DataBasePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="TopRatedPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

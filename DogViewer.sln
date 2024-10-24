@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogViewer", "DogViewer\DogViewer.csproj", "{914D3A81-3C4A-4D5D-BBCD-35D226CD32CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogViewer", "DogViewer\DogViewer.csproj", "{914D3A81-3C4A-4D5D-BBCD-35D226CD32CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogDatabase", "DogDatabase\DogDatabase.csproj", "{A1283830-EFF4-4FE9-9E8E-BDCDC1817264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{914D3A81-3C4A-4D5D-BBCD-35D226CD32CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{914D3A81-3C4A-4D5D-BBCD-35D226CD32CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{914D3A81-3C4A-4D5D-BBCD-35D226CD32CB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A1283830-EFF4-4FE9-9E8E-BDCDC1817264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1283830-EFF4-4FE9-9E8E-BDCDC1817264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1283830-EFF4-4FE9-9E8E-BDCDC1817264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1283830-EFF4-4FE9-9E8E-BDCDC1817264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
