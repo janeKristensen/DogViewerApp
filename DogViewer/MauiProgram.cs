@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using DogDatabase;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace DogViewer
 {
@@ -7,6 +11,9 @@ namespace DogViewer
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -17,6 +24,8 @@ namespace DogViewer
 
             builder.Services.AddSingleton<DogApiClient>();
             builder.Services.AddSingleton<AlertService>();
+            builder.Services.AddDbContext<DbContextDog>((options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DogContextDB"), options => options.EnableRetryOnFailure(maxRetryCount: 0))));
 
 #if DEBUG
             builder.Logging.AddDebug();

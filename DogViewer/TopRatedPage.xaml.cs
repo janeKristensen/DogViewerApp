@@ -1,48 +1,56 @@
 using DogDatabase;
+using Microsoft.Data.SqlClient;
+using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Windows.Input;
 
 namespace DogViewer;
 
 public partial class TopRatedPage : ContentPage
 {
-	private List<Dog> _topRatedDogs = new();
-	private Dog _currentDog = new();
+	private List<Dog> _topRatedDogs;
+	private Dog _currentDog;
 
 	public TopRatedPage()
 	{
 		InitializeComponent();
+        _topRatedDogs = new();
+        _currentDog = new();
         Load();
-        crslView.PositionChanged += OnPositionChanged;
+        crslView.PositionChanged += OnPositionChanged; 
     }
 
 	private void Load()
 	{
-		using (var db = new DbContextDog())
-		{
-			var topDogs = db.Dogs.OrderByDescending(d => d.Stars).Take(5);
+        try
+        {
+            var topDogs = App.DogContext.Dogs.OrderByDescending(d => d.Stars).Take(5);
             foreach (var dog in topDogs)
             {
-				_topRatedDogs.Add(dog);
-            }
+                _topRatedDogs.Add(dog);
+            }   
         }
+        catch (SqlException ex)
+        {
+            _topRatedDogs.Add(App.DefaultDog);
+        }
+
         crslView.ItemsSource = _topRatedDogs;
         _currentDog = _topRatedDogs[0];
-        this.SetImageSource();
+        SetImageSource();
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        using (var db = new DbContextDog())
+        var topDogs = App.DogContext.Dogs.OrderByDescending(d => d.Stars).Take(5);
+        foreach (var dog in topDogs)
         {
-            var topDogs = db.Dogs.OrderByDescending(d => d.Stars).Take(5);
-            foreach (var dog in topDogs)
-            {
-                _topRatedDogs.Add(dog);
-            }
+            _topRatedDogs.Add(dog);
         }
+        
         crslView.ItemsSource = _topRatedDogs;
-        this.SetImageSource();
+        SetImageSource();
     }
 
     public void OnPositionChanged(object sender, PositionChangedEventArgs e)

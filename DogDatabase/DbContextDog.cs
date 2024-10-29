@@ -1,7 +1,6 @@
 ﻿using System.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
 
 
 namespace DogDatabase
@@ -9,13 +8,25 @@ namespace DogDatabase
     public class DbContextDog : DbContext
     {
         public DbSet<Dog> Dogs { get; set; }
+        private readonly IConfiguration _configuration;  
+
+        public DbContextDog(IConfiguration configuration) => _configuration = configuration;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(
-                connectionString: ConfigurationManager.ConnectionStrings["DogContextDB"].ConnectionString,
-                options => options.EnableRetryOnFailure(maxRetryCount:0));
+            if (_configuration != null)
+            {
+                try
+                {
+                    optionsBuilder.UseSqlServer(
+                        _configuration.GetConnectionString("DogContextDB"),
+                        options => options.EnableRetryOnFailure(maxRetryCount: 0));
+                }
+                catch (NullReferenceException ex)
+                {
+                    // Handle the exception as needed
+                }
+            }
         }
-        //
     }
 }

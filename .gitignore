@@ -5,6 +5,7 @@
 
 # User-specific files
 */DogDatabase/App.config
+*/DogDatabase/appsettings.json
 *.rsuser
 *.suo
 *.user
@@ -363,3 +364,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /DogDatabase/App.config
+/DogDatabase/appsettings.json

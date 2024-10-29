@@ -19,7 +19,15 @@ public partial class DataBasePage : ContentPage
 
 	public void Load()
 	{
-		 _breedList = App.Client.DogBreedList;
+        try
+        {
+            _breedList = App.Client.DogBreedList;
+        }
+        catch (Exception ex) 
+        { 
+            _breedList = new List<Dog>() { App.DefaultDog }; 
+        }
+		 
         lstViewDatabase.ItemsSource = _breedList;
         _ratingButtons = new List<ImageButton>()
         {
@@ -44,7 +52,7 @@ public partial class DataBasePage : ContentPage
 		{
             lblRateDog.IsVisible = true;
             _ratingButtons.ForEach(x => x.IsVisible = true);
-            _ratingButtons.ForEach(x => x.IsEnabled = false);
+            _ratingButtons.ForEach(x => x.IsEnabled = true);
 
             if (_app.RatedDogs != null)
 			{
@@ -58,16 +66,16 @@ public partial class DataBasePage : ContentPage
 
     private async void DisplayDataOnSelected(object sender, SelectedItemChangedEventArgs e)
     {
-		Dog selected = (Dog)e.SelectedItem;
+		Dog selection = (Dog)e.SelectedItem;
 
-		if (selected != null)
+		if (selection != null)
 		{
 			try
 			{
-                using (var db = new DbContextDog())
-                {
-                    _selectedDog = db.Dogs.Where(d => d.BreedName == selected.BreedName && d.SubBreed == selected.SubBreed).First();
-                }
+                var db = App.DogContext;
+                
+                    _selectedDog = db.Dogs.Where(d => d.BreedName == selection.BreedName && d.SubBreed == selection.SubBreed).First();
+                
             }
             catch (SqlException ex) 
             { 
@@ -76,25 +84,7 @@ public partial class DataBasePage : ContentPage
                 
             }
 
-			DatabaseDogPhotoImg.Source = await App.Client.AsyncFetchBreedImage(_selectedDog.BreedName, _selectedDog.SubBreed);
-
-			if (_selectedDog.SubBreed == "")
-				lblDataSubBreed.Text = "N/A";
-			else
-				lblDataSubBreed.Text = _selectedDog.SubBreed;
-
-			lblDataBreed.Text = _selectedDog.BreedName;
-			lblDataAge.Text = _selectedDog.AverageAge.ToString();
-			lblDataCoatLength.Text = _selectedDog.CoatLength;
-			lblDataExcersize.Text = _selectedDog.ExcersizeLevel.ToString();
-			lblDataSize.Text = _selectedDog.Size;
-			lblDataTemper.Text = _selectedDog.Temper;
-
-			if (_selectedDog.Ratings == 0)
-				lblDataScore.Text = "No rating";
-			else
-                lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
-
+            SetInformationFromSelected(_selectedDog);
             SetRatingVisibility();
         }
     }
@@ -140,18 +130,15 @@ public partial class DataBasePage : ContentPage
 		_app.RatedDogs.Add(_selectedDog);
 
 		try
-		{
-            using (var db = new DbContextDog())
+		{         
+            var dog = App.DogContext.Dogs.Find(_selectedDog.Id);
+            if (dog != null)
             {
-                var dog = db.Dogs.Find(_selectedDog.Id);
-                if (dog != null)
-                {
-                    dog.Score = _selectedDog.Score;
-                    dog.Ratings = _selectedDog.Ratings;
-                    dog.Stars = _selectedDog.GetRating();
-                    db.SaveChanges();
-                }
-            }
+                dog.Score = _selectedDog.Score;
+                dog.Ratings = _selectedDog.Ratings;
+                dog.Stars = _selectedDog.GetRating();
+                App.DogContext.SaveChanges();
+            } 
         }
         catch (SqlException ex) 
         { 
@@ -161,5 +148,31 @@ public partial class DataBasePage : ContentPage
 
         lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
         SetRatingVisibility();
+    }
+
+    private async void SetInformationFromSelected(Dog selected)
+    {
+        string imgSource = await App.Client.AsyncFetchBreedImage(_selectedDog.BreedName, _selectedDog.SubBreed);
+        if (imgSource == "default")
+            DatabaseDogPhotoImg.Source = "default_dogs.png";
+        else
+            DatabaseDogPhotoImg.Source = imgSource;
+
+        if (_selectedDog.SubBreed == "")
+            lblDataSubBreed.Text = "N/A";
+        else
+            lblDataSubBreed.Text = _selectedDog.SubBreed;
+
+        lblDataBreed.Text = _selectedDog.BreedName;
+        lblDataAge.Text = _selectedDog.AverageAge.ToString();
+        lblDataCoatLength.Text = _selectedDog.CoatLength;
+        lblDataExcersize.Text = _selectedDog.ExcersizeLevel.ToString();
+        lblDataSize.Text = _selectedDog.Size;
+        lblDataTemper.Text = _selectedDog.Temper;
+
+        if (_selectedDog.Ratings == 0)
+            lblDataScore.Text = "No rating";
+        else
+            lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
     }
 }
