@@ -7,7 +7,7 @@ namespace DogDatabase
 {
     public class Dog()
     {
-        private int _excersizeLevel;
+        private byte _excersizeLevel;
 
         public Dog(string BreedName):this() { this.BreedName = BreedName; }
 
@@ -38,12 +38,12 @@ namespace DogDatabase
         public string Temper { get; set; } = string.Empty;
         public int Score {  get; set; } = 0;
         public int Ratings { get; set; } = 0;
-        public Decimal Stars { get; set; } = 0; 
-        
-        public byte ExcersizeLevel 
+        public Decimal Stars { get; set; } = 0;
+
+        public byte ExcersizeLevel
         {
-            get { return (byte) _excersizeLevel; }
-            set 
+            get { return _excersizeLevel; }
+            set
             {
                 if (value < 0 || value > 5)
                     throw new ArgumentException("Excersize level must be a value between 1 and 5.");

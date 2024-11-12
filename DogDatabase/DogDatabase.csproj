@@ -10,6 +10,18 @@
 	  </configuration>
   </PropertyGroup>
 
+	
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+	
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />

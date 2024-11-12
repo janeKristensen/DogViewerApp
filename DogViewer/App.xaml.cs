@@ -1,5 +1,7 @@
 ﻿
 
+using DogDatabase;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace DogViewer
@@ -9,40 +11,53 @@ namespace DogViewer
         private static IServiceProvider _serviceProvider;
         internal static AlertService AlertService;
         internal static DogApiClient Client;
+        internal static DbContextDog DogContext;
 
         // List of dogs that has received a rating by user in this instance of app.
-        public List<DogDatabase.Dog> RatedDogs { get; private set; }
+        public List<Dog> RatedDogs { get; private set; }
 
         // Default dog will be displayed when there is no connection to sql database
-        internal static DogDatabase.Dog DefaultDog;
+        internal static Dog DefaultDog;
 
         public App(IServiceProvider provider)
         {
             InitializeComponent();
 
             _serviceProvider = provider;
-            this.RatedDogs = new();
+            DogContext = _serviceProvider.GetService<DbContextDog>();
+
+            RatedDogs = new();
             DefaultDog = new(1, "australian", "kelpie", "Medium", "Medium", 15, "Mild", 5);
 
             MainPage = new AppShell();
             AlertService = _serviceProvider.GetService<AlertService>();
-            Client = _serviceProvider.GetService<DogApiClient>();
-            if (Client is null)
-                throw new NullReferenceException("Could not connect to Dog API.");
 
             // Assign methods to delegate methods
             AlertService.alert += DisplayAlert;
             AlertService.alert += LogAlert;
             AlertService.alertConfirm += DisplayAlertConfirmation;
 
-            Load(); 
+            try
+            {
+                Client = _serviceProvider.GetService<DogApiClient>();
+                if (Client is null)
+                    throw new NullReferenceException("Could not connect to Dog API.");
+
+                Load();
+            }
+            catch (NullReferenceException ex) 
+            {
+                AlertService.Alert("A critical error occurred", "Could not connect to API", new bool[] { true, false, false });
+            }   
         }
 
         private async void Load()
         {
-            await Client.GetBreedsList();
+            if(!await Client.GetBreedsList())
+                Client.AddToBreedsList(DefaultDog);
+
             //First time population of data in empty sql database:
-            //DatabaseInitializer.OnInit(Client);  
+            //DatabaseInitializer.OnInit(Client); 
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
@@ -56,9 +71,12 @@ namespace DogViewer
 
         #region Error notification methods
 
+        // Pop up alert on main screen
         public static Task DisplayAlert(string title, string message) => 
             Current.MainPage.DisplayAlert(title, message, "OK");
+
             
+        // Log alert in log file
         public static Task LogAlert(string title, string message)
         {
             string path = System.AppContext.BaseDirectory;
@@ -68,8 +86,10 @@ namespace DogViewer
                 sw.WriteLine($"{System.DateTime.UtcNow} - Error: {title}, {message}");
             }
             return Task.CompletedTask;  
+
         }
 
+        // Pop alert with confirmation button and log to file
         public static Task<bool> DisplayAlertConfirmation(string title, string message)
         {
             LogAlert(title, message);   

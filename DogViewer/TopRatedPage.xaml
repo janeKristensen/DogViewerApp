@@ -3,14 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DogViewer.TopRatedPage"
              Title="Top 5 Dogs">
-    
-    <StackLayout 
-        WidthRequest="1000"
-        HorizontalOptions="Center">
-        <HorizontalStackLayout
-            HorizontalOptions="Center">
-            <StackLayout>
-                <CarouselView 
+
+    <StackLayout>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+        
+        <VerticalStackLayout
+            Grid.Column="0"
+            WidthRequest="400"
+            HeightRequest="500"
+            VerticalOptions="Start"
+            HorizontalOptions="Start">
+            <CarouselView 
                     x:Name="crslView"
                     IndicatorView="indicatorView"
                     WidthRequest="350"
@@ -28,17 +35,19 @@
                     <CarouselView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout>
-                                <Frame HasShadow="True"
+                                <Frame 
+                                   HasShadow="True"
                                    BorderColor="DarkGray"
                                    CornerRadius="5"
-                                   Margin="20"
+                                   Padding="0,0,0,0"
+                                    WidthRequest="250"
                                    HeightRequest="300"
                                    HorizontalOptions="Center"
                                    VerticalOptions="CenterAndExpand">
                                     <StackLayout>
                                         <Grid Padding="20, 0, 0, 0">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="110"/>
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
@@ -136,7 +145,7 @@
                                                 Grid.Column="1"
                                                 VerticalTextAlignment="Start"
                                                 Padding="0,10,0,0"
-                                                Text="{Binding Excersize}"/>
+                                                Text="{Binding ExcersizeLevel}"/>
                                             <Label 
                                                 x:Name="lblDataSize" 
                                                 Grid.Row="4" 
@@ -172,35 +181,38 @@
                         </DataTemplate>
                     </CarouselView.ItemTemplate>
                 </CarouselView>
-            </StackLayout>
-            <Image 
-                x:Name="imgCrslView"
-                Margin="0,0,0,0"
-                HeightRequest="300"
-                Aspect="AspectFit"/>
-        </HorizontalStackLayout>
+            <HorizontalStackLayout 
+                 HorizontalOptions="Center" 
+                 VerticalOptions="Center"
+                 Margin="0,20,0,0"> 
+                <ImageButton 
+                     Source="arrow_left.png" 
+                     Clicked="NavigateLeft"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     Margin="0,0,10,0"/>
+                <IndicatorView x:Name="indicatorView"
+                    IndicatorColor="{StaticResource PrimaryDarkText}"
+                    SelectedIndicatorColor="{StaticResource Tertiary}"
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center"/>
+                <ImageButton 
+                     Source="arrow_right.png" 
+                     Clicked="NavigateRight"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     Margin="10,0,0,0"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
         
-        <IndicatorView x:Name="indicatorView"
-           IndicatorColor="{StaticResource PrimaryDarkText}"
-           SelectedIndicatorColor="{StaticResource Tertiary}"
-           HorizontalOptions="Center" />
-        <HorizontalStackLayout HorizontalOptions="Center">
-            <ImageButton 
-                Source="star.png" 
-                Clicked="NavigateLeft"
-                HorizontalOptions="Center"
-                Margin="0,20,10,0"/>
-            <Label 
-                Text="Navigate"
-                HorizontalOptions="Center"
-                VerticalTextAlignment="Center"
-                Margin="10,20,10,0"
-                FontSize="16"/>
-            <ImageButton 
-                Source="star.png" 
-                Clicked="NavigateRight"
-                HorizontalOptions="Center"
-                Margin="10,20,0,0"/>
-        </HorizontalStackLayout>
+        <Image 
+            Grid.Column="1"
+            HorizontalOptions="Start"
+            VerticalOptions="Start"
+             x:Name="imgCrslView"
+             Margin="0,20,0,0"
+             HeightRequest="500"
+             Aspect="AspectFit"/>
+        </Grid>
     </StackLayout>
 </ContentPage>

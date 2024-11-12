@@ -42,45 +42,52 @@ namespace DogViewer
 
     public class DogApiClient : ApiClient
     {
-        private  ImageResponse? _dogImage;
+        private ImageResponse? _dogImage;
         private BreedResponse? _breedsResponse;
         public List<Dog>? DogBreedList { get; private set; }
 
         public DogApiClient()
         {
             DogBreedList = new List<Dog>();
+            _breedsResponse = new BreedResponse();
         }
 
-        public async Task GetBreedsList()
+        public void AddToBreedsList(Dog dog)
+        {
+            DogBreedList.Add(dog);
+        }
+
+        public async Task<bool> GetBreedsList()
         {
             Uri uri = new Uri(@"https://dog.ceo/api/breeds/list/all");
-            _breedsResponse = await GetResponse<BreedResponse>(uri);  
-            SetDogBreedList();
+            _breedsResponse = await GetResponse<BreedResponse>(uri);
+            if (_breedsResponse == null)
+            {
+                return false;
+            }
+            else
+            {
+                SetDogBreedList();
+                return true;
+            }  
         }
 
-        public async void SetDogBreedList()
+        private async void SetDogBreedList()
         {
-            if (_breedsResponse.Breeds != null)
+            foreach (var kvp in _breedsResponse.Breeds)
             {
-                foreach (var kvp in _breedsResponse.Breeds)
+                if (kvp.Value.Count == 0)
                 {
-                    if (kvp.Value.Count == 0)
+                    DogBreedList.Add(new Dog(kvp.Key));
+                }
+                else
+                {
+                    foreach (string type in kvp.Value)
                     {
-                        DogBreedList.Add(new Dog(kvp.Key));
-                    }
-                    else
-                    {
-                        foreach (string type in kvp.Value)
-                        {
-                            DogBreedList.Add(new Dog(kvp.Key, type));
-                        }
+                        DogBreedList.Add(new Dog(kvp.Key, type));
                     }
                 }
             }
-            else 
-            {
-                 App.AlertService.Alert("An error occurred!", "List of dog breeds was not returned from API.");
-            }    
         }
 
         public async Task<string> AsyncFetchRandomImage()
@@ -114,8 +121,8 @@ namespace DogViewer
                 return _dogImage.message;
             }
 
-            App.AlertService.Alert("Image not found!", "The selected dog breed does not exist in the database. Please try again.");
-            return "default_dogs.png";
+            App.AlertService.Alert("Image not found!", "The selected dog breed does not exist in the database. Please try again.", new bool[] { false, true, false});
+            return "default";
         }
     }
 }
