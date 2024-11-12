@@ -16,16 +16,9 @@ namespace DogDatabase
         {
             if (_configuration != null)
             {
-                try
-                {
                     optionsBuilder.UseSqlServer(
                         _configuration.GetConnectionString("DogContextDB"),
                         options => options.EnableRetryOnFailure(maxRetryCount: 0));
-                }
-                catch (NullReferenceException ex)
-                {
-                    // Handle the exception as needed
-                }
             }
         }
     }

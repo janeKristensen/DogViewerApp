@@ -14,10 +14,10 @@ namespace DogViewer
         internal static DbContextDog DogContext;
 
         // List of dogs that has received a rating by user in this instance of app.
-        public List<DogDatabase.Dog> RatedDogs { get; private set; }
+        public List<Dog> RatedDogs { get; private set; }
 
         // Default dog will be displayed when there is no connection to sql database
-        internal static DogDatabase.Dog DefaultDog;
+        internal static Dog DefaultDog;
 
         public App(IServiceProvider provider)
         {
@@ -47,7 +47,7 @@ namespace DogViewer
             }
             catch (NullReferenceException ex) 
             {
-                AlertService.Alert("A critical error occurred", "Could not connect to API");
+                AlertService.Alert("A critical error occurred", "Could not connect to API", new bool[] { true, false, false });
             }   
         }
 
@@ -74,6 +74,7 @@ namespace DogViewer
         // Pop up alert on main screen
         public static Task DisplayAlert(string title, string message) => 
             Current.MainPage.DisplayAlert(title, message, "OK");
+
             
         // Log alert in log file
         public static Task LogAlert(string title, string message)
@@ -85,6 +86,7 @@ namespace DogViewer
                 sw.WriteLine($"{System.DateTime.UtcNow} - Error: {title}, {message}");
             }
             return Task.CompletedTask;  
+
         }
 
         // Pop alert with confirmation button and log to file

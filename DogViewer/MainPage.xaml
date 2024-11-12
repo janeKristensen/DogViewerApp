@@ -12,8 +12,13 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
                 <Border 
+                    Grid.Row="0"
                     StrokeThickness="2"
                     StrokeShape="RoundRectangle 10,10,10,10">
                     <Image 
@@ -21,8 +26,26 @@
                         HeightRequest="400" 
                         Aspect="AspectFit"
                         SemanticProperties.Description="Random photo of a dog" 
-                        HorizontalOptions="Center"/>
+                        HorizontalOptions="Center">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="NavigateToDatabasePage"/>
+                        </Image.GestureRecognizers>
+                    </Image>
                 </Border>
+                <Label
+                    x:Name="lblImgBreedName"
+                    Grid.Row="1"
+                    HorizontalOptions="Center"
+                    Style="{StaticResource NormalText}"
+                    TextColor="{StaticResource PrimaryDarkText}"
+                    SemanticProperties.HeadingLevel="Level2"
+                    IsEnabled="True"
+                    >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="NavigateToDatabasePage"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
             </Grid>
             
             
@@ -32,7 +55,7 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
                 <Label
-                Text="This app will bring you cute dog pictures and helpful information on dog breeds."
+                Text="An app for cute dog photos and helpful information on dog breeds."
                 Style="{StaticResource NormalText}"
                 TextColor="{StaticResource PrimaryDarkText}"
                 SemanticProperties.HeadingLevel="Level2"/>

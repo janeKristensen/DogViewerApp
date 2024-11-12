@@ -14,8 +14,15 @@ namespace DogViewer
         public event AlertOperation alert;
         public event AlertOperationConfirmation alertConfirm;    
 
-        public void Alert(string title, string message)
+        public void Alert(string title, string message, bool[] invoke)
         {
+            for (int i = 0; i < alert.GetInvocationList().Length; i++) 
+            {
+                if (invoke[i])
+                {
+                    alert.GetInvocationList()[i].DynamicInvoke();
+                }
+            }
             alert.Invoke(title, message);
         }
 

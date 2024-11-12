@@ -1,15 +1,14 @@
+
 using DogDatabase;
 using Microsoft.Data.SqlClient;
 
 
 namespace DogViewer;
 
-public partial class DataBasePage : ContentPage
+public partial class DataBasePage : ContentPage, IQueryAttributable
 {
-	private Dog? _selectedDog;
 	private List<Dog>? _breedList;
-    private List<ImageButton> _ratingButtons;
-    private App _app = (App)Application.Current;
+    private List<Controls.RatingButton> _ratingButtons;
 
     public DataBasePage()
 	{
@@ -17,7 +16,21 @@ public partial class DataBasePage : ContentPage
 		Load();
     }
 
-	public void Load()
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.ContainsKey("selected"))
+        {
+            string message = query["selected"].ToString();
+            string[] breed = message.Split("-");
+            if (breed.Count() == 1)
+                DisplayData(new Dog(breed[0], ""));
+            else 
+                DisplayData(new Dog(breed[0], breed[1]));
+        }    
+    }
+
+
+    public void Load()
 	{
         try
         {
@@ -29,7 +42,7 @@ public partial class DataBasePage : ContentPage
         }
 		 
         lstViewDatabase.ItemsSource = _breedList;
-        _ratingButtons = new List<ImageButton>()
+        _ratingButtons = new List<Controls.RatingButton>()
         {
             imgBtnOneStar,
             imgBtnTwoStar,
@@ -37,13 +50,13 @@ public partial class DataBasePage : ContentPage
             imgBtnFourStar,
             imgBtnFiveStar,
         };
-        SetRatingVisibility();
+        SetRatingVisibility((Dog)lstViewDatabase.SelectedItem);
     }
 
-	private void SetRatingVisibility()
+	private void SetRatingVisibility(Dog selectedDog)
 	{
        
-		if (_selectedDog == null)
+		if (selectedDog == null)
 		{
 			lblRateDog.IsVisible = false;
             _ratingButtons.ForEach(x => x.IsVisible = false);
@@ -54,9 +67,10 @@ public partial class DataBasePage : ContentPage
             _ratingButtons.ForEach(x => x.IsVisible = true);
             _ratingButtons.ForEach(x => x.IsEnabled = true);
 
-            if (_app.RatedDogs != null)
+            var app = Application.Current as App; 
+            if (app.RatedDogs != null)
 			{
-				if (_app.RatedDogs.Find(x => x.Id == _selectedDog.Id) != null)
+				if (app.RatedDogs.Find(x => x.Id == selectedDog.Id) != null)
 				{
                     _ratingButtons.ForEach(x => x.IsEnabled = false);
                 }
@@ -64,115 +78,98 @@ public partial class DataBasePage : ContentPage
 		}
 	}
 
-    private async void DisplayDataOnSelected(object sender, SelectedItemChangedEventArgs e)
+    private void DisplayDataOnSelected(object sender, SelectedItemChangedEventArgs e)
     {
 		Dog selection = (Dog)e.SelectedItem;
-
-		if (selection != null)
-		{
-			try
-			{
-                var db = App.DogContext;
-                
-                    _selectedDog = db.Dogs.Where(d => d.BreedName == selection.BreedName && d.SubBreed == selection.SubBreed).First();
-                
-            }
-            catch (SqlException ex) 
-            { 
-                _selectedDog = App.DefaultDog;
-                App.AlertService.Alert("Connection error", "Could not connect to the database.");
-                
-            }
-
-            SetInformationFromSelected(_selectedDog);
-            SetRatingVisibility();
-        }
+        DisplayData(selection);
     }
 
-    private void SearchDatabase(object sender, TextChangedEventArgs e)
+    public void DisplayData(Dog selection)
     {
-		if(_breedList != null)
-            lstViewDatabase.ItemsSource = _breedList.FindAll(x => x.BreedName.StartsWith(e.NewTextValue) || x.SubBreed.StartsWith(e.NewTextValue));
- 
-        SetRatingVisibility();
-    }
-
-    private void AddRatingOne(object sender, EventArgs e)
-    {
-        UpdateRating(1);
-    }
-
-    private void AddRatingTwo(object sender, EventArgs e)
-    {
-        UpdateRating(2);
-    }
-
-    private void AddRatingThree(object sender, EventArgs e)
-    {
-        UpdateRating(3);
-    }
-
-    private void AddRatingFour(object sender, EventArgs e)
-    {
-        UpdateRating(4);
-    }
-
-    private void AddRatingFive(object sender, EventArgs e)
-    {
-		UpdateRating(5);
-    }
-
-	private void UpdateRating(int value)
-	{
-        _selectedDog.AddRating(value);
-
-        //Dogs can only be rated once per instance of app
-		_app.RatedDogs.Add(_selectedDog);
-
-		try
-		{         
-            var dog = App.DogContext.Dogs.Find(_selectedDog.Id);
-            if (dog != null)
+        if (selection != null)
+        {
+            var selectedDog = selection;
+            try
             {
-                dog.Score = _selectedDog.Score;
-                dog.Ratings = _selectedDog.Ratings;
-                dog.Stars = _selectedDog.GetRating();
-                App.DogContext.SaveChanges();
-            } 
-        }
-        catch (SqlException ex) 
-        { 
-            App.DefaultDog.AddRating(value);
-            _app.RatedDogs.Add(App.DefaultDog); 
-        }
+                selectedDog = App.DogContext.Dogs.Where(d => d.BreedName == selection.BreedName && d.SubBreed == selection.SubBreed).First();
+            }
+            catch (SqlException ex)
+            {
+                selectedDog = App.DefaultDog;
+                App.AlertService.Alert("Connection error", "Could not connect to the database.", new bool[] { true, false, false });
+            }
 
-        lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
-        SetRatingVisibility();
+            SetInformationFromSelected(selectedDog);
+            SetRatingVisibility(selectedDog);
+        }
     }
 
-    private async void SetInformationFromSelected(Dog selected)
+    private async void SetInformationFromSelected(Dog selectedDog)
     {
-        string imgSource = await App.Client.AsyncFetchBreedImage(_selectedDog.BreedName, _selectedDog.SubBreed);
+        string imgSource = await App.Client.AsyncFetchBreedImage(selectedDog.BreedName, selectedDog.SubBreed);
         if (imgSource == "default")
             DatabaseDogPhotoImg.Source = "default_dogs.png";
         else
             DatabaseDogPhotoImg.Source = imgSource;
 
-        if (_selectedDog.SubBreed == "")
+        if (selectedDog.SubBreed == "")
             lblDataSubBreed.Text = "N/A";
         else
-            lblDataSubBreed.Text = _selectedDog.SubBreed;
+            lblDataSubBreed.Text = selectedDog.SubBreed;
 
-        lblDataBreed.Text = _selectedDog.BreedName;
-        lblDataAge.Text = _selectedDog.AverageAge.ToString();
-        lblDataCoatLength.Text = _selectedDog.CoatLength;
-        lblDataExcersize.Text = _selectedDog.ExcersizeLevel.ToString();
-        lblDataSize.Text = _selectedDog.Size;
-        lblDataTemper.Text = _selectedDog.Temper;
+        lblDataBreed.Text = selectedDog.BreedName;
+        lblDataAge.Text = selectedDog.AverageAge.ToString();
+        lblDataCoatLength.Text = selectedDog.CoatLength;
+        lblDataExcersize.Text = selectedDog.ExcersizeLevel.ToString();
+        lblDataSize.Text = selectedDog.Size;
+        lblDataTemper.Text = selectedDog.Temper;
 
-        if (_selectedDog.Ratings == 0)
+        if (selectedDog.Ratings == 0)
             lblDataScore.Text = "No rating";
         else
-            lblDataScore.Text = String.Format("{0:N1} stars", _selectedDog.GetRating());
+            lblDataScore.Text = String.Format("{0:N1} stars", selectedDog.GetRating());
+    }
+
+    private void SearchDatabase(object sender, TextChangedEventArgs e)
+    {
+        lstViewDatabase.ItemsSource = _breedList.FindAll(x => x.BreedName.StartsWith(e.NewTextValue) || x.SubBreed.StartsWith(e.NewTextValue));
+        SetRatingVisibility((Dog)lstViewDatabase.SelectedItem);
+    }
+
+    private void AddRating(object sender, EventArgs e)
+    {
+        var button = (Controls.RatingButton)sender;
+        UpdateRating(button.RatingValue, (Dog)lstViewDatabase.SelectedItem);
+    }
+
+
+	private void UpdateRating(int value, Dog selectedDog)
+	{
+        selectedDog.AddRating(value);
+
+        //App keeps a list of already rated dogs
+        var app = Application.Current as App;
+
+        Dog dog = new Dog();
+		try
+		{         
+            dog = App.DogContext.Dogs.Where(d => d.BreedName == selectedDog.BreedName && d.SubBreed == selectedDog.SubBreed).First();
+            if (dog != null)
+            {
+                dog.Score = selectedDog.Score;
+                dog.Ratings = selectedDog.Ratings;
+                dog.Stars = selectedDog.GetRating();
+                App.DogContext.SaveChanges();
+                app.RatedDogs.Add(dog);
+            } 
+        }
+        catch (SqlException ex) 
+        { 
+            App.DefaultDog.AddRating(value);
+            app.RatedDogs.Add(App.DefaultDog); 
+        }
+
+        lblDataScore.Text = String.Format("{0:N1} stars", dog.GetRating());
+        SetRatingVisibility(dog);
     }
 }

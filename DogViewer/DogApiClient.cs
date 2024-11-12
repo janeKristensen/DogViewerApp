@@ -121,7 +121,7 @@ namespace DogViewer
                 return _dogImage.message;
             }
 
-            App.AlertService.Alert("Image not found!", "The selected dog breed does not exist in the database. Please try again.");
+            App.AlertService.Alert("Image not found!", "The selected dog breed does not exist in the database. Please try again.", new bool[] { false, true, false});
             return "default";
         }
     }
