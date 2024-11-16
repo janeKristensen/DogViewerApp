@@ -4,25 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DogViewer
+namespace DogViewer.Services
 {
     public delegate Task AlertOperation(string title, string message);
     public delegate Task<bool> AlertOperationConfirmation(string title, string message);
 
-    public class AlertService 
+    public class AlertService
     {
         public event AlertOperation alert;
-        public event AlertOperationConfirmation alertConfirm;    
+        public event AlertOperationConfirmation alertConfirm;
 
-        public void Alert(string title, string message, bool[] invoke)
+        public void Alert(string title, string message)
         {
-            for (int i = 0; i < alert.GetInvocationList().Length; i++) 
-            {
-                if (invoke[i])
-                {
-                    alert.GetInvocationList()[i].DynamicInvoke();
-                }
-            }
             alert.Invoke(title, message);
         }
 

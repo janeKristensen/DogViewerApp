@@ -18,7 +18,7 @@
                 Title="Database"
                 ContentTemplate="{DataTemplate local:DataBasePage}"
                 Route="DataBasePage" />
-            <ShellContent
+        <ShellContent
                 Title="Top Rated"
                 ContentTemplate="{DataTemplate local:TopRatedPage}"
                 Route="TopRatedPage" />

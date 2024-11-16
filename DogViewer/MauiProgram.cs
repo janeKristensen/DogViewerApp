@@ -3,6 +3,7 @@ using DogDatabase;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using DogViewer.Services;
 
 namespace DogViewer
 {
@@ -24,6 +25,7 @@ namespace DogViewer
 
             builder.Services.AddSingleton<DogApiClient>();
             builder.Services.AddSingleton<AlertService>();
+            builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddDbContext<DbContextDog>((options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DogContextDB"), options => options.EnableRetryOnFailure(maxRetryCount: 0))));
 

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
-namespace DogViewer.Controls
+namespace DogViewer.Models
 {
     public class RatingButton : ImageButton
     {
-        public int RatingValue {  get; set; }
+        public int RatingValue { get; set; }
     }
 }

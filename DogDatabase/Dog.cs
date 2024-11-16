@@ -65,7 +65,7 @@ namespace DogDatabase
 
         public Decimal GetRating()
         {
-            Stars = (Decimal)(Score / Ratings);
+            Stars = (Decimal)Score / (Decimal)Ratings;
             return Stars;
         }
     }
