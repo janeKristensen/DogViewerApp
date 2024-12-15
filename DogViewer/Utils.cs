@@ -8,12 +8,11 @@ namespace DogViewer
 {
     internal class Utils
     {
-        public static Models.ILabelCreator LabelCreator = new Models.TitleLabelCreator();
-
-        
         #region Error notification delegate methods
-        public static Task DisplayAlert(string title, string message) =>
-            App.Current.MainPage.DisplayAlert(title, message, "OK");
+        public static Task DisplayAlert(string title, string message)
+        { 
+            return App.Current.MainPage.DisplayAlert(title, message, "OK");
+        }
 
         public static Task LogAlert(string title, string message)
         {

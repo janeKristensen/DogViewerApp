@@ -1,4 +1,5 @@
 ﻿using Azure;
+using System.Text.RegularExpressions;
 
 namespace DogViewer
 {
@@ -27,8 +28,16 @@ namespace DogViewer
         {
             if (BreedEntry.Text != null)
             {
-                string response = await App.Client.AsyncFetchBreedImage(BreedEntry.Text.ToLower());
-                SetMainPageDetails(response); 
+                if (Regex.IsMatch(BreedEntry.Text, @"^[a-zA-Z]+\-?\s?[a-zA-Z]*$"))
+                {
+                    string response = await App.Client.AsyncFetchBreedImage(BreedEntry.Text.ToLower());
+                    SetMainPageDetails(response);
+                }
+                else
+                {
+                    App.AlertService.Alert("Entry is not valid.", $"Only characters a-z are allowed.");
+                }
+                BreedEntry.Text = string.Empty;
             }
         }
 

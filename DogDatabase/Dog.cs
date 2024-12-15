@@ -9,14 +9,18 @@ namespace DogDatabase
     {
         private byte _excersizeLevel;
 
-        public Dog(string BreedName):this() { this.BreedName = BreedName; }
+        public Dog(string BreedName):this() 
+        { 
+            this.BreedName = BreedName; 
+        }
 
         public Dog(string BreedName, string SubBreed) : this(BreedName)
         { 
             this.SubBreed = SubBreed;
         }
 
-        public Dog(int id, string BreedName, string SubBreed, string coatLength, string size, double avgAge, string temper, byte excersize) : this(BreedName, SubBreed)
+        public Dog(int id, string BreedName, string SubBreed, string coatLength, string size, 
+            double avgAge,  string temper, byte excersize)  : this(BreedName, SubBreed)
         { 
             Id = id;
             CoatLength = coatLength;    

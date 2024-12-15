@@ -26,7 +26,6 @@ namespace DogViewer.Services
         }
     }
 
-
     internal class ImageResponse
     {
         [JsonPropertyName("message")]
@@ -58,7 +57,6 @@ namespace DogViewer.Services
             return dogBreedList;
         }
     }
-
 
     public class DogApiClient : ApiClient
     {

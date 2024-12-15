@@ -66,6 +66,7 @@
                     HeightRequest="400" 
                     SelectionMode="Single" 
                     ItemSelected="DisplayDataOnSelected"
+                    Loaded="ScrollToSelected"
                     SeparatorVisibility="Default"
                     SeparatorColor="WhiteSmoke">
 
@@ -73,15 +74,15 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="150" />
-                                            <ColumnDefinition Width="125" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition Width="125" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
 
-                                        <Label 
+                                            <Label 
                                             Grid.Column="0"
                                             Grid.Row="1"
                                             HorizontalTextAlignment="Start"
@@ -89,7 +90,7 @@
                                             HorizontalOptions="Start"
                                             Padding="10,0,0,0"
                                             Text="{Binding BreedName}"/>
-                                        <Label 
+                                            <Label 
                                             Grid.Column="1"
                                             Grid.Row="1"
                                             HorizontalTextAlignment="Start"
@@ -97,7 +98,8 @@
                                             HorizontalOptions="Start"
                                             Padding="10,0,0,0"
                                             Text="{Binding SubBreed}"/>
-                                    </Grid>
+
+                                        </Grid>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
