@@ -9,19 +9,19 @@
     HeightRequest="800">
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" >
-        
-            <ShellContent
-                 Title="Image Generator"
-                 ContentTemplate="{DataTemplate local:MainPage}"
-                 Route="MainPage" />
-            <ShellContent
-                Title="Database"
-                ContentTemplate="{DataTemplate local:DataBasePage}"
-                Route="DataBasePage" />
-            <ShellContent
-                Title="Top Rated"
-                ContentTemplate="{DataTemplate local:TopRatedPage}"
-                Route="TopRatedPage" />
+
+        <ShellContent
+            Title="Image Generator"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+        <ShellContent
+            Title="Database"
+            ContentTemplate="{DataTemplate local:DataBasePage}"
+            Route="DataBasePage" />
+        <ShellContent
+            Title="Top Rated"
+            ContentTemplate="{DataTemplate local:TopRatedPage}"
+            Route="TopRatedPage" />
     </FlyoutItem>
     
 </Shell>

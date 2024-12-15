@@ -1,4 +1,6 @@
-﻿namespace DogViewer
+﻿
+
+namespace DogViewer
 {
     public partial class AppShell : Shell
     {

@@ -55,7 +55,7 @@
                 SemanticProperties.HeadingLevel="Level1" />
 
                 <Label
-                Text="An app for cute dog photos and helpful information on dog breeds."
+                Text="Get a random dog or search for a breed below."
                 Style="{StaticResource NormalText}"
                 TextColor="{StaticResource PrimaryDarkText}"
                 SemanticProperties.HeadingLevel="Level2"/>
